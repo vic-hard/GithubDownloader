@@ -9,8 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.swan.githubdownloader.search.SearchViewModel
 import com.swan.githubdownloader.search.model.SearchScreenState
+import com.swan.githubdownloader.ui.navigation.destinations.DownloadsScreen
 import com.swan.githubdownloader.ui.navigation.destinations.HomeScreen
 import com.swan.githubdownloader.ui.navigation.destinations.SplashScreen
+import com.swan.githubdownloader.ui.screens.DownloadsScreenComposable
 import com.swan.githubdownloader.ui.screens.HomeScreenComposable
 import com.swan.githubdownloader.ui.screens.SplashScreenComposable
 
@@ -31,11 +33,16 @@ internal fun GithubDownloaderNavHost(navController: NavHostController) {
             val viewModel: SearchViewModel = hiltViewModel()
             val state: SearchScreenState by viewModel.searchScreenState.collectAsState()
             HomeScreenComposable(
-                state,
-                viewModel::updateSearchQuery,
-                viewModel::searchUserRepos,
-                viewModel::downloadRepo
+                state = state,
+                updateSearchQuery = viewModel::updateSearchQuery,
+                searchUserRepos = viewModel::searchUserRepos,
+                downloadRepo = viewModel::downloadRepo,
+                navigateToDownloadsScreen = { navController.navigate(DownloadsScreen) }
             )
+        }
+
+        composable<DownloadsScreen> {
+            DownloadsScreenComposable()
         }
 
     }

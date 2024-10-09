@@ -10,7 +10,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class FileRepositoryImpl @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val downloadManager: DownloadManager
 ) : FileRepository {
 
     override fun downloadFile(url: String, fileName: String, mimeType: String): ApiResult<Unit> {
@@ -27,8 +28,7 @@ class FileRepositoryImpl @Inject constructor(
                 DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
             )
 
-            val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            manager.enqueue(request)
+            downloadManager.enqueue(request)
             ApiResult.Success(Unit)
         } catch (e: Exception) {
             ApiResult.Error(e)
