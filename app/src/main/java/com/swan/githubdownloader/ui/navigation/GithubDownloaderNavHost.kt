@@ -27,7 +27,9 @@ internal fun GithubDownloaderNavHost(navController: NavHostController) {
 
         composable<SplashScreen> {
             SplashScreenComposable {
-                navController.navigate(HomeScreen)
+                navController.navigate(HomeScreen) {
+                    popUpTo(SplashScreen) { inclusive = true }
+                }
             }
         }
 
