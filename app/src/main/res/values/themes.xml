@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GithubDownloader" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.GithubDownloader" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/github_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.GithubDownloader.Main</item>
+    </style>
+
+    <style name="Theme.GithubDownloader.Main" parent="android:Theme.Material.Light.NoActionBar"/>
+
 </resources>
