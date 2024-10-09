@@ -39,7 +39,8 @@ fun RepoItem(repo: GithubRepo, downloadRepo: () -> Unit) {
             Text(text = repo.language ?: stringResource(id = R.string.no_language))
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {
-                downloadRepo()
+                if (!repo.private)
+                    downloadRepo()
             }) {
                 Text(text = stringResource(id = R.string.download_zip))
             }

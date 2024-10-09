@@ -7,4 +7,6 @@ data class GithubRepo(val name: String,
                       val description: String?,
                       val language: String?,
                       @SerializedName("default_branch") val defaultBranch: String,
-                      val owner: GitHubUser)
+                      val owner: GitHubUser,
+                      val private: Boolean
+)
