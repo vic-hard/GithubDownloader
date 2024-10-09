@@ -27,6 +27,7 @@ fun RepoItem(repo: GithubRepo) {
     ) {
         val uriHandler = LocalUriHandler.current
         Column(modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
                 .clickable {
                     if (repo.htmlUrl.isNotBlank())
