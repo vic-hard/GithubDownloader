@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -95,6 +96,15 @@ fun HomeScreenComposable(
             Text(stringResource(id = R.string.search))
         }
         Spacer(modifier = Modifier.height(16.dp))
+
+        if (state.errorMessage.isNotBlank()) {
+            Text(
+                text = state.errorMessage,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
 
         if (state.isLoading) {
             CircularProgressIndicator()

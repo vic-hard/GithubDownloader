@@ -2,6 +2,7 @@ package com.swan.githubdownloader.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.swan.githubdownloader.data.api.model.ApiResult
 import com.swan.githubdownloader.data.api.model.GithubRepo
 import com.swan.githubdownloader.domain.downloads.DownloadFileUseCase
 import com.swan.githubdownloader.domain.find_user_repos.FindUserReposUseCase
@@ -25,8 +26,35 @@ class SearchViewModel @Inject constructor(
     fun searchUserRepos() {
         viewModelScope.launch {
             _searchScreenState.update { it.copy(isLoading = true) }
-            val repos = findRepos(searchScreenState.value.searchQuery)
-            _searchScreenState.update { it.copy(isLoading = false, repos = repos) }
+            val result = findRepos(searchScreenState.value.searchQuery)
+            if (result.isSuccess()) {
+                val data = result.getSuccessData() ?: listOf()
+                _searchScreenState.update {
+                    it.copy(
+                        isLoading = false,
+                        repos = data,
+                        errorMessage = ""
+                    )
+                }
+            } else {
+                val message: String = when (result) {
+                    is ApiResult.Failure -> {
+                        result.message
+                    }
+                    is ApiResult.Error -> {
+                        result.throwable.message ?: "Unknown Error"
+                    }
+                    else -> "Unknown Failure"
+                }
+                _searchScreenState.update {
+                    it.copy(
+                        isLoading = false,
+                        repos = listOf(),
+                        errorMessage = message
+                    )
+                }
+            }
+
         }
     }
 

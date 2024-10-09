@@ -1,5 +1,6 @@
 package com.swan.githubdownloader.domain.find_user_repos
 
+import com.swan.githubdownloader.data.api.model.ApiResult
 import com.swan.githubdownloader.data.api.model.GithubRepo
 import com.swan.githubdownloader.data.repository.GithubRepository
 import kotlinx.coroutines.Dispatchers
@@ -11,16 +12,8 @@ class FindUserReposUseCase @Inject constructor(
     private val repository: GithubRepository
 ) {
 
-    suspend operator fun invoke(user: String): List<GithubRepo> {
-        return try {
-            withContext(Dispatchers.IO) {
-                repository.getUserRepos(user)
-            }
-        } catch (e: Exception) {
-            Timber.e("Error while fetching repo: %s", e.message)
-            listOf()
-        }
-
+    suspend operator fun invoke(user: String): ApiResult<List<GithubRepo>> {
+        return repository.getUserRepos(user)
     }
 
 }
