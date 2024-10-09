@@ -19,7 +19,7 @@ import com.swan.githubdownloader.R
 import com.swan.githubdownloader.data.api.model.GithubRepo
 
 @Composable
-fun RepoItem(repo: GithubRepo) {
+fun RepoItem(repo: GithubRepo, downloadRepo: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,7 +39,7 @@ fun RepoItem(repo: GithubRepo) {
             Text(text = repo.language ?: stringResource(id = R.string.no_language))
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {
-                // Handle zip download (implement download logic here)
+                downloadRepo()
             }) {
                 Text(text = stringResource(id = R.string.download_zip))
             }

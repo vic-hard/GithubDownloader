@@ -24,8 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.swan.githubdownloader.R
+import com.swan.githubdownloader.data.api.model.GithubRepo
 import com.swan.githubdownloader.search.model.SearchScreenState
 import com.swan.githubdownloader.ui.views.RepoItem
+import com.swan.githubdownloader.util.Consts
 
 @Composable
 @Preview
@@ -38,7 +40,8 @@ fun HomeScreenComposablePreview() {
         HomeScreenComposable(
             state = SearchScreenState(),
             updateSearchQuery = {},
-            searchUserRepos = {})
+            searchUserRepos = {},
+            downloadRepo = { _, _ -> })
     }
 }
 
@@ -46,7 +49,8 @@ fun HomeScreenComposablePreview() {
 fun HomeScreenComposable(
     state: SearchScreenState,
     updateSearchQuery: (username: String) -> Unit,
-    searchUserRepos: () -> Unit
+    searchUserRepos: () -> Unit,
+    downloadRepo: (repo: GithubRepo, mimeType: String) -> Unit
 ) {
     var username by remember { mutableStateOf("") }
 
@@ -79,7 +83,7 @@ fun HomeScreenComposable(
                         repo.name
                     }
                 ) { repo ->
-                    RepoItem(repo)
+                    RepoItem(repo, downloadRepo = { downloadRepo(repo, Consts.ZIP_MIME_TYPE) })
                 }
             }
         }

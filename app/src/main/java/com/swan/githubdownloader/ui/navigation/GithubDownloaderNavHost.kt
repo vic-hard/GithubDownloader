@@ -30,7 +30,12 @@ internal fun GithubDownloaderNavHost(navController: NavHostController) {
         composable<HomeScreen> {
             val viewModel: SearchViewModel = hiltViewModel()
             val state: SearchScreenState by viewModel.searchScreenState.collectAsState()
-            HomeScreenComposable(state, viewModel::updateSearchQuery, viewModel::searchUserRepos)
+            HomeScreenComposable(
+                state,
+                viewModel::updateSearchQuery,
+                viewModel::searchUserRepos,
+                viewModel::downloadRepo
+            )
         }
 
     }
