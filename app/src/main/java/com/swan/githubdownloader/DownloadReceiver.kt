@@ -4,13 +4,16 @@ import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.swan.githubdownloader.data.repository.DownloadStatusRepository
 import com.swan.githubdownloader.domain.downloads.SaveDownloadedRepoUseCase
 import com.swan.githubdownloader.util.Consts
 import com.swan.githubdownloader.util.extractUserNameFromGithubUrl
+import timber.log.Timber
 
 class DownloadReceiver(
     private val downloadManager: DownloadManager,
-    private val saveDownloadedRepository: SaveDownloadedRepoUseCase
+    private val saveDownloadedRepository: SaveDownloadedRepoUseCase,
+    private val downloadStatusRepository: DownloadStatusRepository
 ) : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -37,8 +40,14 @@ class DownloadReceiver(
             if (!url.contains(Consts.GITHUB_DOWNLOAD_LINK_PART))
                 return
 
-            if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                saveDownloadedRepository(userName, fileName)
+            when (status) {
+                DownloadManager.STATUS_SUCCESSFUL -> {
+                    saveDownloadedRepository(userName, fileName)
+                    downloadStatusRepository.removeDownload(downloadId)
+                }
+                DownloadManager.STATUS_RUNNING, DownloadManager.STATUS_PENDING -> {
+                    downloadStatusRepository.addDownload(downloadId, userName, fileName, status, url)
+                }
             }
         }
         cursor.close()

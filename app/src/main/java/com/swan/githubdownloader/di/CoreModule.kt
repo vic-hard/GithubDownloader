@@ -7,6 +7,8 @@ import com.swan.githubdownloader.DownloadReceiver
 import com.swan.githubdownloader.data.api.GithubApiService
 import com.swan.githubdownloader.data.database.AppDatabase
 import com.swan.githubdownloader.data.database.dao.RepositoryDao
+import com.swan.githubdownloader.data.repository.DownloadStatusRepository
+import com.swan.githubdownloader.data.repository.DownloadStatusRepositoryImpl
 import com.swan.githubdownloader.data.repository.FileRepository
 import com.swan.githubdownloader.data.repository.FileRepositoryImpl
 import com.swan.githubdownloader.data.repository.GithubRepository
@@ -26,10 +28,10 @@ object CoreModule {
     @Provides
     @Singleton
     fun provideFileRepository(
-        @ApplicationContext context: Context,
+        downloadStatusRepository: DownloadStatusRepository,
         downloadManager: DownloadManager
     ): FileRepository {
-        return FileRepositoryImpl(context, downloadManager)
+        return FileRepositoryImpl(downloadStatusRepository, downloadManager)
     }
 
     @Provides
@@ -65,9 +67,22 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideDownloadReceiver(downloadManager: DownloadManager,
-                                useCase: SaveDownloadedRepoUseCase
+    fun provideDownloadReceiver(
+        downloadManager: DownloadManager,
+        useCase: SaveDownloadedRepoUseCase,
+        downloadStatusRepository: DownloadStatusRepository
     ): DownloadReceiver {
-        return DownloadReceiver(downloadManager, useCase)
+        return DownloadReceiver(
+            downloadManager,
+            useCase,
+            downloadStatusRepository
+        )
     }
+
+    @Provides
+    @Singleton
+    fun provideDownloadStatusRepository(): DownloadStatusRepository {
+        return DownloadStatusRepositoryImpl()
+    }
+
 }

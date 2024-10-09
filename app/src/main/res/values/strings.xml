@@ -5,4 +5,9 @@
     <string name="no_description">No description</string>
     <string name="no_language">No language</string>
     <string name="download_zip">Download as ZIP</string>
+    <string name="downloaded_repositories">Downloaded Repositories</string>
+    <string name="downloading_repositories">Downloading Repositories</string>
+    <string name="user">User: %1$s</string>
+    <string name="no_downloading_repositories">No downloading repositories</string>
+    <string name="no_downloaded_repositories">No downloaded repositories</string>
 </resources>

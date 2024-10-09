@@ -1,16 +1,16 @@
 package com.swan.githubdownloader.data.repository
 
 import android.app.DownloadManager
-import android.content.Context
 import android.net.Uri
 import android.os.Environment
 import com.swan.githubdownloader.data.api.model.ApiResult
 import com.swan.githubdownloader.util.Consts
+import com.swan.githubdownloader.util.extractUserNameFromGithubUrl
 import timber.log.Timber
 import javax.inject.Inject
 
 class FileRepositoryImpl @Inject constructor(
-    private val context: Context,
+    private val downloadStatusRepository: DownloadStatusRepository,
     private val downloadManager: DownloadManager
 ) : FileRepository {
 
@@ -28,7 +28,14 @@ class FileRepositoryImpl @Inject constructor(
                 DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
             )
 
-            downloadManager.enqueue(request)
+            val id = downloadManager.enqueue(request)
+            downloadStatusRepository.addDownload(
+                id,
+                extractUserNameFromGithubUrl(url),
+                fileName,
+                DownloadManager.STATUS_RUNNING,
+                url
+            )
             ApiResult.Success(Unit)
         } catch (e: Exception) {
             ApiResult.Error(e)
