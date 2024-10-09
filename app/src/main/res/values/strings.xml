@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Github Downloader</string>
+    <string name="github_username">GitHub Username</string>
+    <string name="search">"Search"</string>
+    <string name="no_description">No description</string>
+    <string name="no_language">No language</string>
+    <string name="download_zip">Download as ZIP</string>
 </resources>
